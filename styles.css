@@ -1,0 +1,631 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 30px;
+  background-color: #f7f7f7;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.data-source-header {
+  font-size: 20px;     /* Similar to h4 */
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #333;         /* Slightly dark for better contrast */
+}
+
+.data-story-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.data-story-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #222;
+}
+
+.data-story-subtitle {
+  font-size: 18px;
+  color: #555;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.data-story-instructions {
+  font-size: 16px;
+  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.data-story-inside-container {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #fff; /* same white as container */
+  border-top: 1px solid #ccc; /* light separator from the chart */
+  font-family: Arial, sans-serif;
+  color: #333;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.data-story-inside-container h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.data-story-inside-container h3 {
+  font-size: 20px;
+  margin-top: 30px;
+  color: #1f77b4; /* matches the theme color */
+}
+
+.data-story-inside-container p {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.data-story-inside-container ul {
+  margin-left: 20px;
+  padding-left: 20px;
+}
+
+.data-story-inside-container li {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+#chart-container {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#chart-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+#chart-area {
+  flex: 0 0 80%;   /* 80% for chart */
+}
+
+
+#legend-controls-container {
+  flex: 0 0 20%;  /* 20% for legend + controls */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#legend-container svg {
+  width: 200px;    /* bigger */
+  height: 180px;   /* bigger */
+}
+
+.legend-box rect {
+  width: 180px;    /* adjust rectangle to match */
+  height: 160px;
+}
+
+.legend-box text {
+  font-size: 16px;   /* bigger text */
+}
+
+.legend-box line {
+  stroke-width: 4px; /* thicker lines in legend */
+}
+
+/* Make the Exclude Modes tighter */
+#modeCheckboxes {
+  margin-top: 10px;
+}
+
+#controls .slider-wrapper:last-of-type {
+  padding: 10px 15px 10px 15px; /* tighten up */
+}
+
+#controls .slider-wrapper h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* Optional: tighten checkboxes slightly */
+#modeCheckboxes label {
+  font-size: 14px;
+  margin-top: 4px;
+}
+#controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#lineChart {
+  flex: 0 0 80%;
+  width: 100%;
+  height: 600px;
+}
+
+#controls h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.slider-wrapper {
+  width: 100%;
+  padding: 30px 20px 60px 20px; /* Extra bottom padding for ticks */
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* <-- vertical stacking */
+  align-items: center;
+  justify-content: flex-start; /* <-- CHANGED to flex-start so content is not centered */
+  height: auto;     
+}
+
+/* Make sure the noUiSlider itself does not overflow */
+#yearSlider, #monthSlider {
+  width: 90%;
+}
+
+/* Tooltip Styling */
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+}
+
+.speech-bubble {
+  position: relative;
+  background: #fff;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 180px;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+/* Slider Theming */
+.noUi-target {
+  background: #eee;
+  border: none;
+  box-shadow: none;
+}
+
+.noUi-connect {
+  background: #1f77b4; /* Blue line, matching train color */
+}
+
+.noUi-handle {
+  background: white;
+  border: 2px solid #1f77b4;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Tick Labels */
+.noUi-pips-horizontal .noUi-value {
+  margin-top: 18px;
+  font-size: 10px;
+  display: block; /* <-- make sure all labels show */
+}
+
+/* Major Ticks (show all months) */
+.noUi-pips-horizontal .noUi-marker-large {
+  display: block;
+}
+
+/* Minor Ticks (we can choose to show or hide) */
+.noUi-pips-horizontal .noUi-marker {
+  display: block; /* <-- show all tick marks */
+  height: 10px; /* smaller tick height */
+  background: #999; /* light color for tick lines */
+}
+
+/* Adjust the pip labels slightly */
+.noUi-horizontal .noUi-pips {
+  padding-top: 12px; /* closer */
+  
+}
+
+/* Placeholder text styling */
+.placeholder-text {
+  margin: 40px 0;
+  text-align: center;
+}
+
+.placeholder-text h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.placeholder-text p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Sunburst container */
+#sunburst-container {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#sunburstChart {
+  width: 100%;
+  height: 800px; /* Big and prominent */
+}
+
+.tooltip-sunburst {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  pointer-events: none;
+  position: absolute;
+  opacity: 0;
+}
+
+#resetButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  display: none; /* initially hidden */
+  background-color: #1f77b4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+}
+
+#sunburstLegend {
+  position: absolute;
+  bottom: 1450px;
+  right: 150px;
+  width: 320px;        /* Wider legend box */
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;       /* More padding */
+  font-size: 18px;     /* Bigger base font */
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+  text-align: left;
+}
+
+#sunburstLegend h3 {
+  margin-top: 0;
+  font-size: 22px;     /* Bigger legend title */
+  margin-bottom: 16px;
+  color: #1f77b4;
+}
+
+#sunburstLegend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#sunburstLegend li {
+  margin-bottom: 12px; /* More space between lines */
+  font-size: 18px;     /* Bigger list items */
+  white-space: nowrap;
+}
+
+
+#pyramid-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 40px 20px;
+}
+
+#pyramid-male, #pyramid-female, #pyramid-persons{
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 48%; /* each box takes almost half */
+  padding: 20px;
+  box-sizing: border-box;
+  min-width: 600px; /* <-- force a minimum width for bigger chart space */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  
+}
+
+
+.tooltip-pyramid {
+  font-size: 14px;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  position: absolute;
+  width: auto;
+  max-width: 250px;
+}
+
+#toggle-button-container {
+  display: flex;
+  justify-content: flex-end; /* right-aligned */
+  margin-top: 20px;
+  gap: 10px; /* <--- Add gap between buttons */
+}
+
+#toggleModeButton, #toggleGenderButton {
+  background-color: #1f77b4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+}
+
+#toggleModeButton:hover, #toggleViewButton:hover {
+  background-color: #145a8a; /* darker on hover */
+}
+
+#pyramid-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.pyramid-box {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  width: 600px; /* Adjust width as needed */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.pyramid-chart {
+  display: flex;
+  justify-content: center;
+}
+
+.pyramid-text {
+  margin-top: 20px;
+  text-align: left;
+  color: #333;
+}
+
+.pyramid-text h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.pyramid-text p {
+  font-size: 16px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+
+
+#radar-container {
+  display: flex;
+  justify-content: center;      /* Center horizontally in page */
+  align-items: flex-start;      /* Align top */
+  gap: 40px;                    /* Gap between chart and legend */
+  padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.radar-left {
+  position: relative;           /* For button positioning */
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  width: 800px;                 /* Fix radar width */
+}
+
+.radar-chart-box {
+  width: 100%;
+  height: auto;
+  overflow-x: auto;
+}
+
+.radar-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.radar-buttons button {
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #1f77b4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.radar-buttons button:hover {
+  background-color: #145a8a;
+}
+
+/* Legend Box */
+.radar-legend-box {
+  width: 250px;                  /* Fixed width for legend */
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Legend SVG inside it */
+.radar-legend-box svg {
+  width: 100%;
+}
+
+
+#stacked-bar-container {
+  margin: 30px auto; 
+  width: 75%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column; /* Container itself stays column */
+  justify-content: center; 
+}
+
+#stacked-bar-controls {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+#stacked-bar-wrapper {
+  display: flex;
+  flex-direction: row; /* Make chart and legend side-by-side */
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+#stackedBarChart {
+  width: 75%;
+  height: 600px;
+  padding-left: 100px;
+}
+
+#stacked-bar-legend {
+  width: 20%;  /* Take about 20% */
+  margin-left: 20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 18px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  box-sizing: border-box;
+}
+
+#stacked-bar-legend h3 {
+  margin-top: 0;
+  font-size: 22px;
+  margin-bottom: 16px;
+  color: #1f77b4;
+}
+
+#stacked-bar-legend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#stacked-bar-legend li {
+  margin-bottom: 12px;
+  font-size: 18px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+#stacked-bar-legend li::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  background-color: currentColor;
+  border-radius: 3px;
+}
+
+#stackedToggleView {
+  background-color: #1f77b4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+}
+
+#stackedToggleView:hover {
+  background-color: #145a8a;
+}
+
+.slider-wrapper h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #1f77b4;
+}
+
+#stackedModeCheckboxes label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+#stackedModeCheckboxes input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+

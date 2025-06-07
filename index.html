@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transport Trends Line Chart</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- noUiSlider CSS and JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+</head>
+<body>
+
+  <header class="data-story-header">
+  <h1 class="data-story-title">Understanding Public Transport Trends in Australia</h1>
+  <p class="data-story-subtitle">
+    Explore how metropolitan public transport modes have evolved over time and how the COVID-19 pandemic influenced travel behavior.
+  </p>
+  <p class="data-story-instructions">
+    <strong>Instructions:</strong> <br />
+    Use the sliders to filter data by year and month ranges. <br />
+    Select or deselect transport modes (Train, Tram, Bus) to customize the view. <br />
+    Hover over points for detailed patronage information. <br />
+    Icons and labels dynamically adjust as you interact with the chart.
+  </p>
+</header>
+
+
+  <div id="chart-container">
+    <div id="chart-wrapper">
+      <div id="chart-area">
+        <svg id="lineChart"></svg>
+         <P class="data-source-header">Data Source</P>
+          <p>Department of Transport and Planning. (n.d.). <i>Monthly public transport patronage by mode</i>. Data.Vic. Retrieved March 12, 2025, from 
+          <a href="https://discover.data.vic.gov.au/dataset/monthly-public-transport-patronage-by-mode" target="_blank">https://discover.data.vic.gov.au/dataset/monthly-public-transport-patronage-by-mode</a>
+      <div class="data-story-inside-container">
+  <h2>Data Story: Evolution of Metropolitan Public Transport Usage in Australia</h2>
+
+  <p>The visualisation presents monthly patronage trends for metropolitan Train, Tram, and Bus services from 2018 to 2024. It highlights how public transport usage patterns shifted before, during, and after the COVID-19 pandemic.</p>
+
+  <p>Public transport patronage began to decline sharply in March 2020, coinciding with the onset of pandemic-induced lockdowns. The decline persisted until December 2021. This period shows a substantial drop in usage across all transport modes.</p>
+
+  <h3>Pre-Pandemic Trends (2018–Early 2020)</h3>
+  <p>Prior to the pandemic, Train services consistently recorded the highest patronage, followed by Tram and Bus services. Seasonal patterns are evident, with slight declines around the December-January period, reflecting reduced commuting during holidays.</p>
+
+  <p>Train services display more pronounced seasonal fluctuations, likely influenced by work and school cycles. Tram and Bus services exhibit steadier trends with moderate seasonal variations.</p>
+
+  <h3>Pandemic Impact (March 2020–December 2021)</h3>
+  <p>From March 2020, all transport modes experienced a sharp and simultaneous decline in patronage. Train services were the most affected, with patronage reaching its lowest levels during strict lockdown periods.</p>
+
+  <p>Recovery during this time was slow and unstable, reflecting the intermittent nature of restrictions and changes in commuting behavior. Bus services showed a slightly quicker and more consistent recovery, possibly due to their role in supporting essential travel within local areas.</p>
+
+  <h3>Post-Pandemic Recovery (2022–2024)</h3>
+  <p>After the easing of restrictions, patronage began to recover across all modes. However, by 2024, usage levels had not returned to their pre-pandemic peaks. Train services remained below historical levels, indicating possible long-term changes in commuting habits, such as the continuation of remote work.</p>
+
+  <p>Tram and Bus services demonstrated stronger recoveries, with Tram usage in particular returning closer to pre-pandemic patterns. This suggests that localized, short-distance transport modes recovered faster than citywide services like Trains.</p>
+
+  <h3>Mode-Specific Insights</h3>
+  <ul>
+    <li><strong>Train:</strong> Experienced the largest drop in patronage and the slowest recovery.</li>
+    <li><strong>Tram:</strong> Showed a quicker rebound, likely due to its connection with local commuting and tourism.</li>
+    <li><strong>Bus:</strong> Displayed resilience with a smoother recovery, reflecting its importance for essential and short-distance travel.</li>
+  </ul>
+
+  <h3>Conclusion</h3>
+  <p>The data reveals the profound and lasting impact of the COVID-19 pandemic on metropolitan public transport usage in Australia. It highlights immediate disruptions as well as longer-term shifts in travel behavior, particularly in the use of Train services. The varying recovery patterns among transport modes offer important insights into the resilience of local transit networks and the evolving nature of urban mobility.</p>
+</div>
+
+      
+      
+      
+        </div>
+
+      <!-- Legend + Controls together -->
+      <div id="legend-controls-container">
+        <div id="legend-container"></div> <!-- Legend -->
+
+        <div id="controls">
+          <h3>Select Year Range:</h3>
+          <div class="slider-wrapper">
+            <div id="yearSlider"></div>
+          </div>
+            <h3>Select Month Range:</h3>
+            <div class="slider-wrapper month-slider-wrapper">
+              <div id="monthSlider"></div>
+            </div>
+              <div class="slider-wrapper"> <!-- reuse the same style! -->
+              <h3>Exclude Modes:</h3>
+              <div id="modeCheckboxes"></div> <!-- checkboxes will be injected here -->
+            </div>
+          </div>
+
+          <P>Attributions</P>
+          <a href="https://www.flaticon.com/free-icons/train" title="train icons">Train icons created by Smashicons - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/tram" title="tram icons">Tram icons created by Freepik - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/bus" title="bus icons">Bus icons created by Freepik - Flaticon</a>
+
+        </div>
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+
+<div class="data-story-header">
+  <h1 class="data-story-title">Understanding Seasonal Public Transport Patronage</h1>
+  <p class="data-story-subtitle">
+    Explore how seasonal patterns affect metropolitan public transport usage, with insights into day types and transport modes.
+  </p>
+  <p class="data-story-instructions">
+    <strong>Instructions:</strong><br />
+    Hover over any segment to view patronage values and percentages.<br />
+    Click on segments (Season, Day Type, or Mode) to zoom in and explore deeper levels.<br />
+    Use the <em>Reset Zoom</em> button to return to the full view.<br />
+    Labels dynamically resize and reposition as you navigate through the chart.
+  </p>
+</div>
+
+
+  <div id="sunburst-container">
+  <button id="resetButton">Reset Zoom</button>
+  <svg id="sunburstChart"></svg>
+  <div id="sunburstLegend" class="sunburst-legend">
+    <h3>Legend</h3>
+    <ul>
+      <li><strong>N-Weekday:</strong> Normal Weekday</li>
+      <li><strong>SH-Weekday:</strong> School Holiday Weekday</li>
+      <li><strong>M-Train:</strong> MetroTrain</li>
+      <li><strong>M-Bus:</strong> MetroBus</li>
+      <li><strong>Tram:</strong> Tram</li>
+    </ul>
+  </div>
+  <p class="data-source-header">Data Source</p>
+<p>Department of Transport and Planning. (n.d.). <i>Monthly average patronage by day type and by mode</i>. Data.Vic. Retrieved March 12, 2025, from 
+<a href="https://discover.data.vic.gov.au/dataset/monthly-average-patronage-by-day-type-and-by-mode" target="_blank">https://discover.data.vic.gov.au/dataset/monthly-average-patronage-by-day-type-and-by-mode</a>
+</p>
+<div class="data-story-inside-container">
+  <h2>Data Story: Seasonal Patterns in Public Transport Patronage</h2>
+
+  <p>The visualization provides a detailed breakdown of public transport patronage across the four seasons, segmented further by day types — Normal Weekdays, School Holiday Weekdays, and Weekends — and transport modes — Train, Tram, and Bus.</p>
+
+  <h3>Seasonal Overview</h3>
+  <p>Autumn records the highest proportion of total patronage at 26.2%, followed closely by Spring (25.3%), Summer (24.4%), and Winter (24.2%). The distribution suggests relatively balanced seasonal patronage, with a slight peak during Autumn months.</p>
+
+  <h3>Autumn</h3>
+  <p>During Autumn, Normal Weekdays account for the majority of patronage (66.3%). Among transport modes, Train services dominate at 41.1%, followed by Tram (33.4%) and Bus (25.5%).</p>
+  <p>School Holiday Weekdays contribute 19.9% of Autumn’s patronage, with a similar modal distribution. Weekends, accounting for 13.8%, show a shift in preferences — Tram usage rises to 42.8%, overtaking Train at 37.5%, with Bus usage at 19.7%.</p>
+
+  <h3>Spring</h3>
+  <p>Spring follows closely in total patronage. Normal Weekdays represent 60.7% of usage, with Train (40.8%) maintaining dominance. Trams and Buses account for 33.0% and 26.3% respectively.</p>
+  <p>School Holiday Weekdays contribute 26.7% to the Spring patronage. Trams see a slight increase in share (34.3%) compared to Normal Weekdays. On Weekends (12.6%), Trams continue to lead (40.8%), while Train and Bus share remain relatively stable.</p>
+
+  <h3>Summer</h3>
+  <p>In Summer, the share of School Holiday Weekdays rises to 28.8%, the highest among all seasons, reflecting the extended holiday period. Normal Weekdays account for 56.9% of patronage, with Train services leading (40.4%), closely followed by Trams (34.3%).</p>
+  <p>During Weekends, Trams see their highest seasonal share at 42.1%, surpassing Train (37.0%) and Bus (20.8%).</p>
+
+  <h3>Winter</h3>
+  <p>Winter maintains a stable pattern with 61.3% of patronage on Normal Weekdays. Train services continue to dominate (41.1%), with Tram (32.9%) and Bus (26.0%) following.</p>
+  <p>School Holiday Weekdays account for 25.6% of patronage. Weekends show a familiar pattern, with Trams leading at 41.1%, Trains at 38.3%, and Buses at 20.6%.</p>
+
+  <h3>Key Insights</h3>
+  <ul>
+    <li><strong>Autumn</strong> sees the highest overall patronage, with Normal Weekdays being the largest contributor.</li>
+    <li><strong>Trams consistently dominate</strong> Weekend patronage across all seasons, with the highest Tram usage recorded in Summer Weekends.</li>
+    <li><strong>Train services</strong> are the preferred mode during Normal Weekdays and School Holiday Weekdays, maintaining over 40% share consistently.</li>
+    <li><strong>Bus patronage</strong> remains steady but lower than Train and Tram across all segments, peaking modestly during Winter weekdays.</li>
+    <li><strong>Summer</strong> demonstrates a shift toward leisure travel, evident in the increased Tram usage and elevated School Holiday Weekday patronage.</li>
+  </ul>
+
+  <h3>Conclusion</h3>
+  <p>The data reveals distinct seasonal and daily variations in public transport usage. While Train services dominate routine weekday travel, Trams emerge as the preferred mode during weekends and holidays, particularly in the warmer months. The consistent, though smaller, share of Bus patronage highlights its steady role in urban mobility across all seasons. These insights are critical for transport planning and resource allocation, ensuring that services are aligned with seasonal and daily demand fluctuations.</p>
+</div>
+
+  
+  
+</div>
+
+<div class="data-story-header">
+  <h1 class="data-story-title">Understanding Transport Mode Usage by Age and Gender (2021 only)</h1>
+  <p class="data-story-subtitle">
+    Explore how car and public transport usage varies across different age groups, segmented by gender.
+  </p>
+  <p class="data-story-instructions">
+    <strong>Instructions:</strong><br />
+    Use the toggle buttons to switch between Absolute and Percentage views.<br />
+    Switch between Split Gender and Combined (Total) Population views.<br />
+    Hover over the bars to view detailed mode breakdowns by age group.<br />
+    Car and Public transport users are visualized for each age cohort.
+  </p>
+  <p class="data-source-header">Data Source For All visualization Below</p>
+<p>Australian Bureau of Statistics. (2024). <i>Transport Census</i>. ABS. Retrieved March 12, 2025, from 
+<a href="https://www.abs.gov.au/statistics/industry/tourism-and-transport/transport-census/latest-release" target="_blank">https://www.abs.gov.au/statistics/industry/tourism-and-transport/transport-census/latest-release</a>
+</p>
+</div>
+
+
+  </div>
+
+  <!-- Toggle Button -->
+  <div id="toggle-button-container">
+    <button id="toggleModeButton">Switch to Percentage View</button>
+    <button id="toggleGenderButton">Switch to Total View</button>
+  </div>
+
+  <!-- Pyramids -->
+  <div id="pyramid-container">
+
+     <div id="pyramid-male" class="pyramid-box">
+    <div class="pyramid-chart" id="pyramid-male-chart"></div>
+    <div class="pyramid-text" id="pyramid-male-text">
+      <h3>Male Transport Usage Patterns (2021 only)</h3>
+      <p>Among males, car usage is predominant across all age groups, with the 25–34 years and 35–44 years brackets showing the highest car patronage. Public transport usage, although significantly lower than car usage, is more stable across the younger age groups, particularly 15–24 years. A sharp decline in car and public transport usage is visible after 55 years, reflecting potential changes in mobility needs or preferences with aging.</p>
+      <p>Notably, males have car usage distributed between ‘car as driver’ and ‘car as passenger’ categories, alongside significant taxi and ride-share services among the younger groups.</p>
+    </div>
+  </div>
+
+     <div id="pyramid-female" class="pyramid-box">
+    <div class="pyramid-chart" id="pyramid-female-chart"></div>
+    <div class="pyramid-text" id="pyramid-female-text">
+      <h3>Female Transport Usage Patterns (2021 only)</h3>
+      <p>Female transport usage patterns show a different distribution compared to males. The 15–24 years group has a strong presence of car passengers and public transport users. Interestingly, the dataset for females does not include the ‘car as driver’ category, highlighting a potential disparity in driving habits between genders.</p>
+      <p>Public transport usage among females is notably high in the 25–34 years and 35–44 years groups, suggesting a strong dependency on accessible transit options for working-age populations. Car passenger and ride-share service use is higher among younger females compared to older groups.</p>
+    </div>
+  </div>
+    <div id="pyramid-persons" class="pyramid-box" style="display: none;">
+  <div class="pyramid-chart" id="pyramid-persons-chart"></div>
+  <div class="pyramid-text" id="pyramid-persons-text">
+    <h3>Overall Transport Usage Patterns (2021 only)</h3>
+    <p>The overall transport usage patterns reflect combined trends of males and females across age groups. Car usage is dominant, with a strong showing in the working-age population (25–54 years), while public transport usage shows steady but comparatively lower patronage across all age brackets.</p>
+    <p>The data indicates that younger (15–24 years) and mid-age (25–44 years) individuals are more likely to utilize public transport, whereas older groups (55 years and above) show a decline in both car and public transport usage, suggesting reduced mobility or a preference for alternative transport means.</p>
+  </div>
+</div>
+
+  </div>
+
+
+<div class="data-story-header">
+  <h1 class="data-story-title">Understanding Income and Vehicle Ownership by Transport Mode (2021 only)</h1>
+  <p class="data-story-subtitle">
+    Explore how personal income levels and vehicle ownership influence public transport usage patterns across different modes.
+  </p>
+  <p class="data-story-instructions">
+    <strong>Instructions:</strong><br />
+    Hover over points on the radar to view the proportion of patronage by income range.<br />
+    Use the <em>Exclude Cars</em> button to remove car-related modes and focus on public transport.<br />
+    Zoom in and out using the + and – buttons for a closer view of specific income brackets.<br />
+    Legend shows the color mapping for each transport mode.
+  </p>
+</div>
+
+
+<div id="radar-container" style="width: 100%;">
+  <div class="radar-left" style="width: 900px;"> <!-- Wider for story -->
+    <div class="radar-buttons">
+      <button id="zoom-in">+</button>
+      <button id="zoom-out">-</button>
+      <button id="toggle-car-filter">Exclude Cars</button>
+    </div>
+    <div id="income-radar" class="radar-chart-box"></div>
+
+    <!-- Data Story Inside -->
+    <div class="data-story-inside-container">
+      <h2>Data Story: Income Levels and Transport Mode Usage (2021 only)</h2>
+
+      <p>The radar chart explores the relationship between individual income levels and preferred modes of transport. By proportionally normalizing the transport mode usage across different income brackets, the visualization highlights clear trends in transportation preferences based on income.</p>
+
+      <h3>Key Insights</h3>
+      <ul>
+        <li><strong>Car as Driver:</strong> Dominates across all income levels, with especially high proportions among mid to high-income groups (e.g., $1,250–$3,499 monthly income).</li>
+        <li><strong>Car as Passenger:</strong> Higher proportions are noticeable among lower-income groups (below $650 monthly income), suggesting reliance on car-pooling or dependent travel.</li>
+        <li><strong>Public Transport (Train, Bus, Tram, Ferry):</strong> Usage shares are relatively more stable across income groups but show modest peaks at lower to mid-income ranges ($300–$799 monthly income).</li>
+        <li><strong>Taxi/ E-hailing Services:</strong> Contribute minimally across all income brackets but are slightly more visible in lower-income groups.</li>
+      </ul>
+
+      <h3>Conclusion</h3>
+      <p>
+        The data illustrates a strong correlation between income levels and the choice of transport modes. Individuals with higher incomes predominantly prefer using private vehicles as drivers, indicating greater access to personal vehicles. In contrast, public transport modes maintain a steady share across varying income groups but do not exhibit dominance, underlining accessibility barriers or lifestyle choices influencing commuting patterns. Understanding these trends can inform urban mobility planning and transport policy interventions, especially for lower-income demographics.
+      </p>
+    </div>
+  </div>
+
+  <div id="radar-legend-container" class="radar-legend-box"></div>
+</div>
+
+
+<div class="data-story-header">
+  <h1 class="data-story-title">Vehicle Ownership and Patronage Across Transport Modes (2021 only)</h1>
+  <p class="data-story-subtitle">
+    Analyze how the number of vehicles owned by individuals relates to their mode of transport. Explore patronage distribution across vehicle ownership categories.
+  </p>
+  <p class="data-story-instructions">
+    <strong>Instructions:</strong><br />
+    Use the toggle button to switch between Absolute and Percentage views.<br />
+    Filter modes by selecting/deselecting options to customize the visualization.<br />
+    Hover over the bars to view detailed patronage numbers or percentages.<br />
+    The visualization dynamically adjusts the stacked bars based on your selection.
+  </p>
+</div>
+
+
+<div id="stacked-bar-container">
+  <div id="stacked-bar-controls">
+    <button id="stackedToggleView">Switch to Percentage View</button>
+    <div class="slider-wrapper"> 
+      <h3>Exclude Modes:</h3>
+      <div id="stackedModeCheckboxes"></div>
+    </div>
+  </div>
+  <div id="stacked-bar-wrapper">
+    <svg id="stackedBarChart"></svg>
+
+  <div id="stacked-bar-legend" class="sunburst-legend">
+    <h3>Legend</h3>
+    <ul id="stackedLegendList"></ul>
+  </div>
+
+</div>
+<div class="data-story-inside-container">
+  <h2>Data Story: Relationship Between Vehicle Ownership and Transport Mode Patronage</h2>
+
+  <p>This visualization examines how the number of motor vehicles owned correlates with the use of various transport modes, offering insights into public transport dependency and private vehicle reliance across different ownership levels.</p>
+
+  <h3>Key Observations</h3>
+
+  <ul>
+    <li><strong>No Motor Vehicles:</strong> Individuals without access to motor vehicles rely heavily on public transport modes — Train, Bus, and Tram/Light Rail collectively account for a large proportion of their mobility. Train usage is the most prominent, followed closely by Bus patronage.</li>
+
+    <li><strong>One Motor Vehicle:</strong> Households with a single vehicle demonstrate a balanced transport behavior. Car usage (both as driver and passenger) rises significantly, but public transport remains an important mode, especially for Train and Bus commuters.</li>
+
+    <li><strong>Two or More Vehicles:</strong> As vehicle ownership increases to two or more, dependence on private vehicles becomes dominant. 'Car, as driver' patronage dramatically increases, while the proportion of public transport usage sharply declines.</li>
+
+    <li><strong>Three Motor Vehicles:</strong> With three vehicles, the preference for private car usage becomes nearly absolute, with minimal reliance on public transport services. 'Car, as driver' takes up the majority of trips, and Train, Bus, and Tram usage drops to negligible levels.</li>
+
+    <li><strong>Four or More Motor Vehicles:</strong> Households with four or more vehicles exhibit the highest dependency on private cars, leaving public transport modes with the smallest patronage share among all groups.</li>
+  </ul>
+
+  <h3>Public Transport vs. Private Vehicle Dynamics</h3>
+  <p>The stacked bar chart reveals a strong inverse relationship between the number of vehicles owned and public transport reliance. The fewer the vehicles, the higher the public transport patronage, emphasizing the importance of public transport services in vehicle-constrained households.</p>
+
+  <p>In contrast, households with greater vehicle ownership overwhelmingly shift toward private car usage, suggesting that policies aimed at reducing car dependency must consider incentives for maintaining or enhancing public transport attractiveness even as household affluence (and vehicle ownership) increases.</p>
+
+  <h3>Interactive Exploration Tips</h3>
+  <ul>
+    <li>Use the <strong>Switch View</strong> button to toggle between Absolute Numbers and Percentage Shares for deeper insights.</li>
+    <li>Exclude specific transport modes to observe how the share distribution changes across the remaining modes.</li>
+    <li>Hover over each bar segment to see detailed patronage figures and percentages by transport mode.</li>
+  </ul>
+
+  <h3>Conclusion</h3>
+  <p>This data highlights the critical role public transport plays for individuals with limited or no access to private vehicles. Understanding these patterns helps inform transport policy, urban planning, and sustainability strategies aimed at balancing mobility needs with congestion and environmental goals.</p>
+</div>
+
+</div>
+
+
+  <script src="LineChart.js"></script>
+  <script src="sunburst.js"></script>
+  <script src="pyramids.js"></script>
+  <script src="radars.js"></script>
+  <script src="stackedbar.js"></script>
+</body>
+</html>
