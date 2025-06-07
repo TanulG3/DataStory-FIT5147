@@ -14,7 +14,7 @@ let excludedModesBar = new Set();
 
 
 async function loadBarData() {
-  const file = await fetch('Transport data summary - first and second release.xlsx');
+  const file = await fetch('https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/Transport%20data%20summary%20-%20first%20and%20second%20release.xlsx');
   const arrayBuffer = await file.arrayBuffer();
   const workbook = XLSX.read(arrayBuffer, { type: "array" });
 

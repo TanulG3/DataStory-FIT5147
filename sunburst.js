@@ -27,7 +27,7 @@ const tooltip = d3.select("body").append("div")
 const resetButton = d3.select("#resetButton")
   .style("display", "none");
 
-d3.csv("monthly_average_patronage_by_day_type_and_by_mode.csv").then(data => {
+d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/monthly_average_patronage_by_day_type_and_by_mode.csv").then(data => {
   function monthToSeason(month) {
     if ([12, 1, 2].includes(+month)) return "Summer";
     if ([3, 4, 5].includes(+month)) return "Autumn";

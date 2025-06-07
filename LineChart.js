@@ -38,7 +38,7 @@ let selectedMonthRange = [1, 12];
 
 let excludedModes = new Set();  // Set to track excluded modes
 
-d3.csv("monthly_public_transport_patronage_by_mode.csv").then(data => {
+d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/monthly_public_transport_patronage_by_mode.csv").then(data => {
   allData = data.map(d => {
     const date = parseDate(`${d.Year}-${String(d.Month).padStart(2, '0')}`);
     return modes.map(mode => ({

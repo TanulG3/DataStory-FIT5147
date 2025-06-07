@@ -12,7 +12,7 @@ let viewMode = 'split'; // split | total
 let maleData = [], femaleData = [], personsData = [];
 
 // Load and parse
-loadExcelFile('Transport data summary - first and second release.xlsx').then(data => {
+loadExcelFile('https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/Transport%20data%20summary%20-%20first%20and%20second%20release.xlsx').then(data => {
   maleData = parseMaleData(data);
   femaleData = parseFemaleData(data);
   personsData = parsePersonsData(data);

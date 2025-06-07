@@ -291,7 +291,7 @@ d3.select('#zoom-out').on('click', function() {
 let isCarsExcluded = false;
 let rawValues, incomeRanges, allModes;
 
-loadExcelFile('Transport data summary - first and second release.xlsx')
+loadExcelFile('https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/Transport%20data%20summary%20-%20first%20and%20second%20release.xlsx')
   .then(workbook => {
     const parsedData = parseIncomeData(workbook);
     incomeRanges = parsedData.incomeRanges;
