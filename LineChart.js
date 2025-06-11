@@ -1,3 +1,4 @@
+// Configuration and Setup
 const margin = { top: 100, right: 100, bottom: 70, left: 90 };
 const legendWidth = 120;
 const legendHeight = 100;
@@ -28,6 +29,7 @@ const iconMapping = {
   "Metropolitan bus": "icons/bus.png"
 };
 
+// Global Variables
 let allData = [];
 let nested = [];
 let x, y;
@@ -38,6 +40,7 @@ let selectedMonthRange = [1, 12];
 
 let excludedModes = new Set();  // Set to track excluded modes
 
+// Data Loading and Initialization
 d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/monthly_public_transport_patronage_by_mode.csv").then(data => {
   allData = data.map(d => {
     const date = parseDate(`${d.Year}-${String(d.Month).padStart(2, '0')}`);
@@ -66,10 +69,12 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
   setupSlider();
 });
 
+// Utility Function for Icon Offset
 function getYOffset(mode) {
   return mode.includes('tram') ? 0 : -15;
 }
 
+// Chart Update on Filters
 function updateChart() {
   const filtered = allData.filter(d => {
     const year = d.Date.getFullYear();
@@ -88,6 +93,7 @@ function updateChart() {
   drawChart(nestedFiltered, minDate, maxDate);
 }
 
+// Main Drawing Function
 function drawChart(nestedData, minDate, maxDate) {
   svg.selectAll("*").remove();
   d3.select("#legend-container").selectAll("*").remove(); 
@@ -132,7 +138,7 @@ svg.append("text")
   .style("fill", "black")
   .text("Covid-19 Lockdown period (March 2020 to December 2021)");
 
-
+  // Chart Titles and Axes
   svg.append("text")
     .attr("x", width / 2)
     .attr("y", -60)
@@ -165,12 +171,14 @@ svg.append("text")
     .style("font-size", "14px")
     .text("Public Transport Patronage");
 
+  // Tooltip Setup
   const tooltip = d3.select("#chart-container").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
   staticIcons = {};
 
+  // Plotting Lines and Icons
   nestedData.forEach(([mode, points]) => {
     if (excludedModes.has(mode)) return; // Skip excluded modes
 
@@ -251,6 +259,7 @@ svg.append("text")
       });
   });
 
+// Legend Rendering
   const legendSvg = d3.select("#legend-container")
   .append("svg")
   .attr("width", 180)      // Bigger Width
@@ -300,6 +309,7 @@ modes.forEach((mode, i) => {
 
 }
 
+// Slider Controls Setup
 function setupSlider() {
   const years = Array.from(new Set(allData.map(d => d.Date.getFullYear()))).sort();
   const minYear = d3.min(years);
@@ -346,6 +356,7 @@ function setupSlider() {
   setupModeCheckboxes();
 }
 
+// Checkbox Mode Filter Setup
 function setupModeCheckboxes() {
   const container = document.getElementById('modeCheckboxes');
   container.innerHTML = ''; // Clear if redrawing
@@ -373,6 +384,7 @@ function setupModeCheckboxes() {
   });
 }
 
+// Helper Functions
 
 function monthName(monthNumber) {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",

@@ -1,3 +1,4 @@
+//  Set dimensions and margins for the bar chart
 const marginBar = { top: 60, right: 30, bottom: 50, left: 200 },
       widthBar = 1000 - marginBar.left - marginBar.right,
       heightBar = 600 - marginBar.top - marginBar.bottom;
@@ -8,11 +9,12 @@ const svgBar = d3.select("#stackedBarChart")
   .append("g")
   .attr("transform", `translate(${marginBar.left},${marginBar.top})`);
 
+//  Data holders and config flags
 let absoluteData = [], percentageData = [], isPercentageView = false;
 let yBar, xBar, colorBar, stackedGroups, groups, subgroups;
 let excludedModesBar = new Set();
 
-
+//  Load and process Excel data
 async function loadBarData() {
   const file = await fetch('https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/Transport%20data%20summary%20-%20first%20and%20second%20release.xlsx');
   const arrayBuffer = await file.arrayBuffer();
@@ -44,6 +46,7 @@ async function loadBarData() {
 
   const filteredData = dataRows.filter(row => modeNames.includes(row[0]));
 
+  // Absolute values
   absoluteData = vehicleHeaders.map((vehicle, i) => {
     const row = { vehicles: vehicle };
     modeNames.forEach(mode => {
@@ -52,7 +55,7 @@ async function loadBarData() {
     return row;
   });
 
-  // Percentage data
+  // Percentage values
   percentageData = absoluteData.map(d => {
     const total = modeNames.reduce((sum, mode) => sum + d[mode], 0);
     const newRow = { vehicles: d.vehicles };
@@ -74,6 +77,7 @@ async function loadBarData() {
   generateModeCheckboxes();
 }
 
+//  Create mode checkboxes to include/exclude transport modes
 function generateModeCheckboxes() {
   const container = d3.select("#stackedModeCheckboxes");
   container.html(''); // Clear old
@@ -98,6 +102,7 @@ function generateModeCheckboxes() {
   });
 }
 
+//  Create legend items matching mode colors
 function drawLegend() {
   const legendContainer = d3.select("#stackedLegendList");
   legendContainer.html(''); // clear old
@@ -109,6 +114,7 @@ function drawLegend() {
   });
 }
 
+//  Recalculate data as percentages, excluding disabled modes
 function recalculatePercentages() {
   return absoluteData.map(d => {
     const includedKeys = subgroups.filter(m => !excludedModesBar.has(m));
@@ -121,6 +127,7 @@ function recalculatePercentages() {
   });
 }
 
+//  Recalculate raw data, excluding disabled modes 
 function recalculateAbsoluteData() {
   return absoluteData.map(d => {
     const includedKeys = subgroups.filter(m => !excludedModesBar.has(m));
@@ -132,7 +139,7 @@ function recalculateAbsoluteData() {
   });
 }
 
-
+//  Render the bar chart
 function drawBars() {
   svgBar.selectAll("*").remove(); // clear
 
@@ -233,12 +240,12 @@ function drawBars() {
     .style("font-size", "20px")
     .style("font-weight", "bold");
 }
-
+//  Button to toggle between absolute and percentage view 
 d3.select("#stackedToggleView").on("click", function() {
   isPercentageView = !isPercentageView;
   drawBars();
   d3.select(this).text(isPercentageView ? "Switch to Absolute View" : "Switch to Percentage View");
 });
 
-
+//  Load everything 
 loadBarData();

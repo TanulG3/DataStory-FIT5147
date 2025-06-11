@@ -1,5 +1,4 @@
-// radars.js
-
+// Load Excel File and Parse Data
 async function loadExcelFile(url) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
@@ -7,6 +6,7 @@ async function loadExcelFile(url) {
   return workbook;
 }
 
+// Extract Transport Mode Data by Income Range
 function parseIncomeData(workbook) {
   const incomeSheet = workbook.Sheets[workbook.SheetNames[6]];
   const jsonData = XLSX.utils.sheet_to_json(incomeSheet, { header: 1, defval: null });
@@ -24,7 +24,6 @@ function parseIncomeData(workbook) {
     'passenger',
     'Train',
     'Bus',
-    'Ferry',
     'light rail',
     'service'
   ];
@@ -59,6 +58,7 @@ function parseIncomeData(workbook) {
   return { incomeRanges, rawValues, allModes: selectedModes };
 }
 
+// Convert Raw Values into Proportions by Income Range
 function computeModeData(rawValues, activeModes) {
   const modeData = {};
   const numIncomeRanges = rawValues[activeModes[0]].length;
@@ -84,7 +84,7 @@ function computeModeData(rawValues, activeModes) {
 }
 
 
-
+// Render Radar Chart
 
 function createIncomeRadar(containerId, incomeRanges, modeData, activeModes) {
   
@@ -152,7 +152,7 @@ function createIncomeRadar(containerId, incomeRanges, modeData, activeModes) {
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em");
   });
-
+ //  Define Line Generator and Colors 
   const radarLine = d3.lineRadial()
     .radius(d => rScale(d))
     .angle((d, i) => i * angleSlice)
@@ -169,6 +169,7 @@ function createIncomeRadar(containerId, incomeRanges, modeData, activeModes) {
       };
 
   const color = d => fixedColors[d]; 
+
   // Tooltip div (hidden initially)
   const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -178,7 +179,7 @@ function createIncomeRadar(containerId, incomeRanges, modeData, activeModes) {
     .attr("class", "speech-bubble");
 
 
-  // Draw each mode
+  // Draw Radar Areas and Points
   activeModes.forEach((mode, idx) => {
     const values = modeData[mode];
 
@@ -287,7 +288,7 @@ d3.select('#zoom-out').on('click', function() {
 
 }
 
-
+// Initialization
 let isCarsExcluded = false;
 let rawValues, incomeRanges, allModes;
 
@@ -302,6 +303,7 @@ loadExcelFile('https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/
     createIncomeRadar('#income-radar', incomeRanges, initialModeData, allModes);
   });
 
+// Toggle Car Inclusion/Exclusion
 d3.select('#toggle-car-filter').on('click', function() {
   isCarsExcluded = !isCarsExcluded;
   

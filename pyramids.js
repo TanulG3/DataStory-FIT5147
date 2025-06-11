@@ -1,17 +1,21 @@
+// Dimensions and layout settings
 const marginPyramids = { top: 50, right: 100, bottom: 80, left: 100 };
 const widthPyramids = 500 - marginPyramids.left - marginPyramids.right;
 const heightPyramids = 750 - marginPyramids.top - marginPyramids.bottom;
 
+
+// Categorizing transport modes
 const transportCategories = {
   car: ['car, as driver', 'car, as passenger', 'taxi/ride-share service'],
-  public: ['train', 'bus', 'ferry', 'tram/light rail']
+  public: ['train', 'bus', 'tram/light rail']
 };
 
+// State tracking
 let currentMode = 'absolute';
 let viewMode = 'split'; // split | total
 let maleData = [], femaleData = [], personsData = [];
 
-// Load and parse
+// Load and parse Excel file
 loadExcelFile('https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/Transport%20data%20summary%20-%20first%20and%20second%20release.xlsx').then(data => {
   maleData = parseMaleData(data);
   femaleData = parseFemaleData(data);
@@ -39,6 +43,7 @@ document.getElementById('toggleGenderButton').addEventListener('click', () => {
   updatePyramids();
 });
 
+// Redraw pyramids based on current view and mode
 function updatePyramids() {
   // Clear all three containers
   d3.selectAll('#pyramid-male > *, #pyramid-female > *, #pyramid-persons > *').remove();
@@ -101,7 +106,7 @@ function addDescription(containerId, title, paragraph) {
   container.appendChild(descDiv);
 }
 
-
+// Reads Excel data into JSON
 function loadExcelFile(url) {
   return fetch(url)
     .then(response => response.arrayBuffer())
@@ -113,6 +118,7 @@ function loadExcelFile(url) {
     });
 }
 
+// Parses male data block
 function parseMaleData(rawData) {
   const ageGroups = [
     '15-24 years', '25-34 years', '35-44 years',
@@ -145,6 +151,7 @@ function parseMaleData(rawData) {
   return males;
 }
 
+// Parses female data block
 function parseFemaleData(rawData) {
   const ageGroups = [
     '15-24 years', '25-34 years', '35-44 years',
@@ -185,6 +192,7 @@ function parseFemaleData(rawData) {
   return females;
 }
 
+// Parses persons (total) data block
 function parsePersonsData(rawData) {
   const ageGroups = [
     '15-24 years', '25-34 years', '35-44 years',
@@ -230,7 +238,7 @@ function parsePersonsData(rawData) {
   return persons;
 }
 
-
+// Core chart drawing function
 function createPyramid(containerId, gender, data, center = false) {
   const svg = d3.select(containerId)
     .append("svg")
@@ -264,6 +272,7 @@ function createPyramid(containerId, gender, data, center = false) {
     dataset.push({ age: age, car: carTotal, carBreakdown: carBreakdown, public: publicTotal, publicBreakdown: publicBreakdown });
   });
 
+  // Handle percentages if needed
   let xMax = d3.max(dataset, d => Math.max(d.car, d.public));
   if (currentMode === 'percentage') {
     xMax = 100;
@@ -274,13 +283,16 @@ function createPyramid(containerId, gender, data, center = false) {
     });
   }
 
+  // Scales
   const x = d3.scaleLinear().domain([0, xMax]).range([0, widthPyramids]).nice();
   const y = d3.scaleBand().domain(ageGroups).range([0, heightPyramids]).padding(0.1);
 
+  // Tooltip
   const tooltip = d3.select("body").append("div").attr("class", "tooltip-pyramid")
     .style("position", "absolute").style("background", "#fff").style("padding", "8px 12px")
     .style("border", "1px solid #ccc").style("border-radius", "8px").style("pointer-events", "none").style("opacity", 0);
 
+  // Car bars (left)
   svg.append("g")
     .selectAll("rect.left")
     .data(dataset)
@@ -295,6 +307,7 @@ function createPyramid(containerId, gender, data, center = false) {
       tooltip.html(buildTooltipContent(d, 'car')).style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 28) + "px");
     }).on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
 
+  // Public bars (right)
   svg.append("g")
     .selectAll("rect.right")
     .data(dataset)
@@ -309,6 +322,7 @@ function createPyramid(containerId, gender, data, center = false) {
       tooltip.html(buildTooltipContent(d, 'public')).style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 28) + "px");
     }).on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
 
+  // Age axis in the middle
   svg.append("g")
     .attr("transform", `translate(${widthPyramids + marginPyramids.right / 2 + 10},0)`)
     .call(d3.axisLeft(y))
@@ -318,6 +332,7 @@ function createPyramid(containerId, gender, data, center = false) {
     .text(d => d === "75 years and over" ? "75 years +" : d)
     .style("text-anchor", "middle").style("font-size", "14px").style("font-weight", "bold");
 
+  // Title
   svg.append("text")
     .attr("x", (widthPyramids * 2 + marginPyramids.left + marginPyramids.right) / 2)
     .attr("y", -20)
@@ -327,6 +342,7 @@ function createPyramid(containerId, gender, data, center = false) {
     .text(`${gender} Population Pyramid`);
 }
 
+// Title
 function buildTooltipContent(d, type) {
   const breakdown = type === 'car' ? d.carBreakdown : d.publicBreakdown;
   const total = type === 'car' ? (currentMode === 'percentage' ? d.carPerc.toFixed(1) + '%' : d.car) :

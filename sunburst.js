@@ -2,16 +2,18 @@ const widthSB = document.getElementById("sunburstChart").clientWidth;
 const heightSB = document.getElementById("sunburstChart").clientHeight;
 const radius = Math.min(widthSB, heightSB) / 2;
 
+
+// SVG setup
 const svgSB = d3.select("#sunburstChart")
   .attr("viewBox", `${-radius} ${-radius} ${2 * radius} ${2 * radius}`)
   .append("g");
 
-// Color scale
+// Color scale for seasons
 const colorSB = d3.scaleOrdinal()
   .domain(["Summer", "Autumn", "Winter", "Spring"])
   .range(["#FDB813", "#E07A5F", "#82A3C9", "#81B29A"]);
 
-// Tooltip
+// Tooltip styling
 const tooltip = d3.select("body").append("div")
   .attr("class", "tooltip-sunburst")
   .style("opacity", 0)
@@ -28,6 +30,8 @@ const resetButton = d3.select("#resetButton")
   .style("display", "none");
 
 d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/main/monthly_average_patronage_by_day_type_and_by_mode.csv").then(data => {
+  
+  // Convert month number to season name
   function monthToSeason(month) {
     if ([12, 1, 2].includes(+month)) return "Summer";
     if ([3, 4, 5].includes(+month)) return "Autumn";
@@ -35,6 +39,7 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
     return "Spring";
   }
 
+  // Parse data and filter
   data.forEach(d => {
     d.Pax_daily = +d.Pax_daily;
     d.Season = monthToSeason(d.Month);
@@ -47,6 +52,7 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
     d.Mode === 'Tram'
   );
 
+  // Group and sum patronage into hierarchical structure
   const hierarchyData = d3.rollup(
     data,
     v => d3.sum(v, d => d.Pax_daily),
@@ -55,6 +61,7 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
     d => d.Mode
   );
 
+  // Convert rollup to nested JSON for hierarchy
   function rollupToHierarchy(rollup) {
     return {
       name: "Patronage",
@@ -72,11 +79,13 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
 
   root.each(d => d.current = d);
 
+  // Partition layout setup
   const partition = d3.partition()
     .size([2 * Math.PI, radius]);
 
   partition(root);
 
+  // Arc generator
   const arc = d3.arc()
     .startAngle(d => d.x0)
     .endAngle(d => d.x1)
@@ -85,6 +94,7 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
 
   const g = svgSB.append("g");
 
+  // Draw arcs
   const path = g.selectAll("path")
     .data(root.descendants())
     .join("path")
@@ -120,6 +130,7 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
     })
     .on("click", clicked);
 
+  // Add labels
   const label = g.selectAll("text")
     .data(root.descendants().filter(d => d.depth > 0)) 
     .join("text")
@@ -145,6 +156,8 @@ d3.csv("https://raw.githubusercontent.com/TanulG3/DataStory-FIT5147/refs/heads/m
     .style("font-weight", d => d.depth === 1 ? "bold" : "normal")
     .style("text-anchor", "middle");
 
+
+// Zoom functionality on click
 function clicked(event, p) {
   const isRoot = (p === root);
 
@@ -211,7 +224,7 @@ function clicked(event, p) {
 }
 
 
-
+// Label visibility based on angle
   function labelVisible(d) {
     const angle = d.x1 - d.x0;
     if (d.depth === 1 && angle < 0.2) return false;
@@ -220,6 +233,7 @@ function clicked(event, p) {
     return d.y1 <= radius && d.y0 >= 0;
   }
 
+  // Label positioning logic
   function labelTransform(d) {
     const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
     const y = (d.y0 + d.y1) / 2;
@@ -228,6 +242,6 @@ function clicked(event, p) {
   }
     return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
   }
-
+// Reset zoom button click
   resetButton.on("click", () => clicked(null, root));
 });
